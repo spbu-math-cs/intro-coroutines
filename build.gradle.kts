@@ -50,6 +50,13 @@ tasks.named<KotlinCompilationTask<*>>("compileKotlin").configure {
     )
 }
 
+sourceSets {
+    this.getByName("main") {
+        this.resources.srcDir("resources")
+    }
+}
+
+
 kotlin {
     sourceSets {
         main {
