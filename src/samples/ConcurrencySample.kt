@@ -2,13 +2,15 @@ package samples
 
 import kotlinx.coroutines.*
 
-fun main() = runBlocking {
-    val deferred: Deferred<Int> = async(Dispatchers.Default) {
-        loadData()
+fun main() =
+    runBlocking {
+        val deferred: Deferred<Int> =
+            async(Dispatchers.Default) {
+                loadData()
+            }
+        log("waiting...")
+        log(deferred.await())
     }
-    log("waiting...")
-    log(deferred.await())
-}
 
 suspend fun loadData(): Int {
     log("loading...")

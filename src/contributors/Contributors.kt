@@ -21,7 +21,6 @@ enum class Variant {
 }
 
 interface Contributors : CoroutineScope {
-
     val job: Job
 
     override val coroutineContext: CoroutineContext
@@ -135,19 +134,21 @@ interface Contributors : CoroutineScope {
         status: LoadingStatus,
         startTime: Long? = null,
     ) {
-        val time = if (startTime != null) {
-            val time = System.currentTimeMillis() - startTime
-            "${(time / 1000)}.${time % 1000 / 100} sec"
-        } else {
-            ""
-        }
-
-        val text = "Loading status: " +
-            when (status) {
-                COMPLETED -> "completed in $time"
-                IN_PROGRESS -> "in progress $time"
-                CANCELED -> "canceled"
+        val time =
+            if (startTime != null) {
+                val time = System.currentTimeMillis() - startTime
+                "${(time / 1000)}.${time % 1000 / 100} sec"
+            } else {
+                ""
             }
+
+        val text =
+            "Loading status: " +
+                when (status) {
+                    COMPLETED -> "completed in $time"
+                    IN_PROGRESS -> "in progress $time"
+                    CANCELED -> "canceled"
+                }
         setLoadingStatus(text, status == IN_PROGRESS)
     }
 
@@ -158,10 +159,11 @@ interface Contributors : CoroutineScope {
         val loadingJob = this
 
         // cancel the loading job if the 'cancel' button was clicked
-        val listener = ActionListener {
-            loadingJob.cancel()
-            updateLoadingStatus(CANCELED)
-        }
+        val listener =
+            ActionListener {
+                loadingJob.cancel()
+                updateLoadingStatus(CANCELED)
+            }
         addCancelListener(listener)
 
         // update the status and remove the listener after the loading job is completed
@@ -189,9 +191,15 @@ interface Contributors : CoroutineScope {
 
     fun updateContributors(users: List<User>)
 
-    fun setLoadingStatus(text: String, iconRunning: Boolean)
+    fun setLoadingStatus(
+        text: String,
+        iconRunning: Boolean,
+    )
 
-    fun setActionsStatus(newLoadingEnabled: Boolean, cancellationEnabled: Boolean = false)
+    fun setActionsStatus(
+        newLoadingEnabled: Boolean,
+        cancellationEnabled: Boolean = false,
+    )
 
     fun addCancelListener(listener: ActionListener)
 

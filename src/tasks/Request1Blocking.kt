@@ -3,12 +3,16 @@ package tasks
 import contributors.*
 import retrofit2.Response
 
-fun loadContributorsBlocking(service: GitHubService, req: RequestData): List<User> {
-    val repos = service
-        .getOrgReposCall(req.org)
-        .execute() // Executes request and blocks the current thread
-        .also { logRepos(req, it) }
-        .body() ?: emptyList()
+fun loadContributorsBlocking(
+    service: GitHubService,
+    req: RequestData,
+): List<User> {
+    val repos =
+        service
+            .getOrgReposCall(req.org)
+            .execute() // Executes request and blocks the current thread
+            .also { logRepos(req, it) }
+            .body() ?: emptyList()
 
     return repos.flatMap { repo ->
         service

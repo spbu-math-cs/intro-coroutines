@@ -25,9 +25,10 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
 
     private val resultsModel = DefaultTableModel(COLUMNS, 0)
     private val results = JTable(resultsModel)
-    private val resultsScroll = JScrollPane(results).apply {
-        preferredSize = Dimension(200, 200)
-    }
+    private val resultsScroll =
+        JScrollPane(results).apply {
+            preferredSize = Dimension(200, 200)
+        }
 
     private val loadingIcon = ImageIcon(javaClass.classLoader.getResource("ajax-loader.gif"))
     private val loadingStatus = JLabel("Start new loading", loadingIcon, SwingConstants.CENTER)
@@ -36,26 +37,27 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
 
     init {
         // Create UI
-        rootPane.contentPane = JPanel(GridBagLayout()).apply {
-            addLabeled("GitHub Username", username)
-            addLabeled("Password/Token", password)
-            addWideSeparator()
-            addLabeled("Organization", org)
-            addLabeled("Variant", variant)
-            addWideSeparator()
-            addWide(
-                JPanel().apply {
-                    add(load)
-                    add(cancel)
-                },
-            )
-            addWide(resultsScroll) {
-                weightx = 1.0
-                weighty = 1.0
-                fill = GridBagConstraints.BOTH
+        rootPane.contentPane =
+            JPanel(GridBagLayout()).apply {
+                addLabeled("GitHub Username", username)
+                addLabeled("Password/Token", password)
+                addWideSeparator()
+                addLabeled("Organization", org)
+                addLabeled("Variant", variant)
+                addWideSeparator()
+                addWide(
+                    JPanel().apply {
+                        add(load)
+                        add(cancel)
+                    },
+                )
+                addWide(resultsScroll) {
+                    weightx = 1.0
+                    weighty = 1.0
+                    fill = GridBagConstraints.BOTH
+                }
+                addWide(loadingStatus)
             }
-            addWide(loadingStatus)
-        }
         // Initialize actions
         init()
     }
@@ -76,7 +78,10 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
         )
     }
 
-    override fun setLoadingStatus(text: String, iconRunning: Boolean) {
+    override fun setLoadingStatus(
+        text: String,
+        iconRunning: Boolean,
+    ) {
         loadingStatus.text = text
         loadingStatus.icon = if (iconRunning) loadingIcon else null
     }
@@ -94,14 +99,19 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
     }
 
     override fun addOnWindowClosingListener(listener: () -> Unit) {
-        addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(e: WindowEvent?) {
-                listener()
-            }
-        })
+        addWindowListener(
+            object : WindowAdapter() {
+                override fun windowClosing(e: WindowEvent?) {
+                    listener()
+                }
+            },
+        )
     }
 
-    override fun setActionsStatus(newLoadingEnabled: Boolean, cancellationEnabled: Boolean) {
+    override fun setActionsStatus(
+        newLoadingEnabled: Boolean,
+        cancellationEnabled: Boolean,
+    ) {
         load.isEnabled = newLoadingEnabled
         cancel.isEnabled = cancellationEnabled
     }
@@ -118,7 +128,10 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
     }
 }
 
-fun JPanel.addLabeled(label: String, component: JComponent) {
+fun JPanel.addLabeled(
+    label: String,
+    component: JComponent,
+) {
     add(
         JLabel(label),
         GridBagConstraints().apply {
@@ -138,7 +151,10 @@ fun JPanel.addLabeled(label: String, component: JComponent) {
     )
 }
 
-fun JPanel.addWide(component: JComponent, constraints: GridBagConstraints.() -> Unit = {}) {
+fun JPanel.addWide(
+    component: JComponent,
+    constraints: GridBagConstraints.() -> Unit = {},
+) {
     add(
         component,
         GridBagConstraints().apply {

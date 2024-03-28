@@ -46,25 +46,31 @@ data class RequestData(
 )
 
 @OptIn(ExperimentalSerializationApi::class)
-fun createGitHubService(username: String, password: String): GitHubService {
+fun createGitHubService(
+    username: String,
+    password: String,
+): GitHubService {
     val authToken = "Basic " + Base64.getEncoder().encode("$username:$password".toByteArray()).toString(Charsets.UTF_8)
-    val httpClient = OkHttpClient.Builder()
-        .addInterceptor { chain ->
-            val original = chain.request()
-            val builder = original.newBuilder()
-                .header("Accept", "application/vnd.github.v3+json")
-                .header("Authorization", authToken)
-            val request = builder.build()
-            chain.proceed(request)
-        }
-        .build()
+    val httpClient =
+        OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val original = chain.request()
+                val builder =
+                    original.newBuilder()
+                        .header("Accept", "application/vnd.github.v3+json")
+                        .header("Authorization", authToken)
+                val request = builder.build()
+                chain.proceed(request)
+            }
+            .build()
 
     val contentType = "application/json".toMediaType()
-    val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.github.com")
-        .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory(contentType))
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .client(httpClient)
-        .build()
+    val retrofit =
+        Retrofit.Builder()
+            .baseUrl("https://api.github.com")
+            .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory(contentType))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(httpClient)
+            .build()
     return retrofit.create(GitHubService::class.java)
 }
