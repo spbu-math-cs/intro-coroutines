@@ -1,6 +1,6 @@
 name: build-and-lint
 
-on: [pull_request]
+on: [push]
 
 jobs:
   ktlint:
