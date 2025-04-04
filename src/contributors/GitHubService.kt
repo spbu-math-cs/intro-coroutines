@@ -8,7 +8,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import java.util.Base64
@@ -52,24 +52,26 @@ fun createGitHubService(
 ): GitHubService {
     val authToken = "Basic " + Base64.getEncoder().encode("$username:$password".toByteArray()).toString(Charsets.UTF_8)
     val httpClient =
-        OkHttpClient.Builder()
+        OkHttpClient
+            .Builder()
             .addInterceptor { chain ->
                 val original = chain.request()
                 val builder =
-                    original.newBuilder()
+                    original
+                        .newBuilder()
                         .header("Accept", "application/vnd.github.v3+json")
                         .header("Authorization", authToken)
                 val request = builder.build()
                 chain.proceed(request)
-            }
-            .build()
+            }.build()
 
     val contentType = "application/json".toMediaType()
     val retrofit =
-        Retrofit.Builder()
+        Retrofit
+            .Builder()
             .baseUrl("https://api.github.com")
             .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory(contentType))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(httpClient)
             .build()
     return retrofit.create(GitHubService::class.java)

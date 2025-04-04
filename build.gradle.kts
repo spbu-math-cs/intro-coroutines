@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-group = "intro-coroutines"
+group = "ru.mkn.kotlin"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -16,7 +16,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
-    implementation(libs.kotlin.serialization.json)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.swing)
@@ -27,12 +27,12 @@ dependencies {
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.mock)
-    implementation(libs.retrofit.rxjava2)
+    implementation(libs.retrofit.rxjava3)
     implementation(libs.retrofit.kotlinx.serialization)
 
     implementation(libs.okhttp)
-    implementation(libs.rxjava)
-    implementation(libs.rxkotlin)
+    implementation(libs.rxjava3)
+    implementation(libs.rxkotlin3)
 
     testImplementation(kotlin("test"))
     testImplementation(platform(libs.junit.bom))
@@ -44,7 +44,7 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.named<KotlinCompilationTask<*>>("compileKotlin").configure {
+tasks.withType<KotlinCompilationTask<*>>().configureEach {
     compilerOptions.freeCompilerArgs.add(
         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
     )
@@ -55,7 +55,6 @@ sourceSets {
         this.resources.srcDir("resources")
     }
 }
-
 
 kotlin {
     sourceSets {

@@ -13,8 +13,7 @@ class Request7ChannelsKtTest {
         runBlocking {
             val startTime = System.currentTimeMillis()
             var index = 0
-            loadContributorsChannels(MockGithubService, testRequestData) {
-                    users, _ ->
+            loadContributorsChannels(MockGithubService, testRequestData) { users, _ ->
                 val expected = concurrentProgressResults[index++]
                 val time = System.currentTimeMillis() - startTime
             /*

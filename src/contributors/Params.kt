@@ -4,10 +4,15 @@ import java.util.prefs.Preferences
 
 private fun prefNode(): Preferences = Preferences.userRoot().node("ContributorsUI")
 
-data class Params(val username: String, val password: String, val org: String, val variant: Variant)
+data class Params(
+    val username: String,
+    val password: String,
+    val org: String,
+    val variant: Variant,
+)
 
-fun loadStoredParams(): Params {
-    return prefNode().run {
+fun loadStoredParams(): Params =
+    prefNode().run {
         Params(
             get("username", ""),
             get("password", ""),
@@ -15,7 +20,6 @@ fun loadStoredParams(): Params {
             Variant.valueOf(get("variant", Variant.BLOCKING.name)),
         )
     }
-}
 
 fun removeStoredParams() {
     prefNode().removeNode()

@@ -2,9 +2,16 @@ package contributors
 
 val testRequestData = RequestData("username", "password", "org")
 
-data class TestRepo(val name: String, val delay: Long, val users: List<User>)
+data class TestRepo(
+    val name: String,
+    val delay: Long,
+    val users: List<User>,
+)
 
-data class TestResults(val timeFromStart: Long, val users: List<User>)
+data class TestResults(
+    val timeFromStart: Long,
+    val users: List<User>,
+)
 
 const val REPOS_DELAY = 1000L
 

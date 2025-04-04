@@ -13,8 +13,7 @@ class Request6ProgressKtTest {
         runBlocking {
             val startTime = System.currentTimeMillis()
             var index = 0
-            loadContributorsProgress(MockGithubService, testRequestData) {
-                    users, _ ->
+            loadContributorsProgress(MockGithubService, testRequestData) { users, _ ->
                 val expected = progressResults[index++]
                 val time = System.currentTimeMillis() - startTime
             /*

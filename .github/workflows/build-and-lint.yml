@@ -1,0 +1,32 @@
+name: build-and-lint
+
+on: [pull_request]
+
+jobs:
+  ktlint:
+    permissions: write-all
+    name: Build and Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+          cache-encryption-key: jhBgYqwfjLn9eyK8d1YDQQ==
+      - run: ./gradlew build --no-daemon --configuration-cache
+      - name: ktlint
+        uses: ScaCap/action-ktlint@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review # Change reporter
+          filter_mode: nofilter
+          fail_on_error: true

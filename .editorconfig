@@ -1,5 +1,6 @@
 root = true
-
-[*.kt]
+[*.{kt,kts}]
 ktlint_standard_filename = disabled
 ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_final-newline = disabled
+ktlint_standard_class-signature = disabled

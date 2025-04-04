@@ -19,7 +19,7 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
     private val username = JTextField(20)
     private val password = JPasswordField(20)
     private val org = JTextField(20)
-    private val variant = JComboBox(Variant.values())
+    private val variant = JComboBox(Variant.entries.toTypedArray())
     private val load = JButton("Load contributors")
     private val cancel = JButton("Cancel").apply { isEnabled = false }
 
@@ -71,9 +71,10 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
             log.info("Clearing result")
         }
         resultsModel.setDataVector(
-            users.map {
-                arrayOf(it.login, it.contributions)
-            }.toTypedArray(),
+            users
+                .map {
+                    arrayOf<Any>(it.login, it.contributions)
+                }.toTypedArray(),
             COLUMNS,
         )
     }
@@ -123,9 +124,7 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
         variant.selectedIndex = params.variant.ordinal
     }
 
-    override fun getParams(): Params {
-        return Params(username.text, password.password.joinToString(""), org.text, getSelectedVariant())
-    }
+    override fun getParams(): Params = Params(username.text, password.password.joinToString(""), org.text, getSelectedVariant())
 }
 
 fun JPanel.addLabeled(
